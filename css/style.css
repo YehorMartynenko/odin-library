@@ -1,0 +1,37 @@
+:root {
+    background-color: lightgray;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+h1, h2 {
+    margin: 1rem;
+    color: rgb(112, 104, 104)
+}
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-auto-rows: max-content;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.book {
+    border-radius: 15px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 10px 10px 20px -16px rgba(66, 68, 90, 1);
+    padding: 1rem 2rem;
+    text-align: center;
+    color:rgb(112, 104, 104)
+}
+
+.book > p:nth-child(-n+2){
+    border-bottom: 1px solid black;
+}
+
+.book > p {
+    padding: 1rem;
+}
