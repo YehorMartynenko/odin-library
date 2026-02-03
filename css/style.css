@@ -1,5 +1,7 @@
 :root {
     background-color: lightgray;
+    --grey: rgb(112, 104, 104);
+    --black: rgb(19, 16, 16);
 }
 
 * {
@@ -9,7 +11,7 @@
 
 h1, h2 {
     margin: 1rem;
-    color: rgb(112, 104, 104)
+    color: var(--black)
 }
 .container {
     display: grid;
@@ -25,7 +27,7 @@ h1, h2 {
     box-shadow: 10px 10px 20px -16px rgba(66, 68, 90, 1);
     padding: 1rem 2rem;
     text-align: center;
-    color:rgb(112, 104, 104)
+    color:var(--grey)
 }
 
 .book > p:nth-child(-n+2){
@@ -34,4 +36,95 @@ h1, h2 {
 
 .book > p {
     padding: 1rem;
+}
+
+.title {
+    color: rgb(19, 16, 16);
+    font-weight: bold;
+}
+
+.add-book {
+    margin: 0 1rem;
+    padding: 0.5rem 1rem;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    border: none;
+    box-shadow: 10px 10px 30px -6px rgba(66, 68, 90, 1);
+    color: var(--black);
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.book-form {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    padding: 3rem;
+    border-radius: 15px;
+    gap: 1rem;
+    position: relative;
+}
+
+img {
+    height: 30px;
+    width: 30px;
+}
+
+.close-btn {
+    align-self: flex-end;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
+.close-btn:hover img{
+    transform: scale(1.1);
+}
+
+.book-form > div  {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.3rem;
+}
+
+.book-form .submit-btn {
+    justify-content: flex-end;
+}
+
+button[type="submit"]{
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: 1px solid grey;
+    font-size: 1rem;
+}
+
+button[type="submit"]:hover{
+    cursor: pointer;
+    border: 1px solid green;
+    color: green;
+}
+
+.book-form input{
+    border-radius: 10px;
+    border: 1px solid gray;
+    padding: 0.5rem 1rem;
+}
+
+::backdrop {
+    background-color: black;
+    opacity: 0.5;
+}
+
+dialog {
+    border-radius: 10px;
+    border: none;
+    margin: auto auto;
 }

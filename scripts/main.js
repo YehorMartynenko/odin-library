@@ -12,9 +12,9 @@ function addBookToLibrary(title, author, pages) {
   myLibrary.push(newBook);
 }
 
-addBookToLibrary("Title1", "Author1", "pages1");
-addBookToLibrary("Title11", "Author11", "pages11");
-addBookToLibrary("Title111", "Author111", "pages111");
+addBookToLibrary("Title1", "Author1", 1213);
+addBookToLibrary("Title11", "Author11", 11);
+addBookToLibrary("Title111", "Author111", 12341);
 console.table(myLibrary);
 
 const container = document.querySelector(".container");
@@ -30,9 +30,9 @@ function displayBooks(){
         let pages = document.createElement("p");
         pages.setAttribute("class","pages");
 
-        title.textContent = el.title;
-        author.textContent = el.author;
-        pages.textContent = el.pages;
+        title.textContent = `Title: ${el.title}`;
+        author.textContent = `Author: ${el.author}`;
+        pages.textContent = `Pages: ${el.pages}`;
 
         book.appendChild(title);
         book.appendChild(author);
@@ -42,3 +42,21 @@ function displayBooks(){
 }
 
 displayBooks();
+
+const addBookBtn = document.querySelector(".add-book");
+const dialog = document.querySelector("dialog");
+const closeBtn = document.querySelector(".close-btn");
+const submitBtn = document.querySelector("button[type='submit']");
+
+addBookBtn.addEventListener("click", () => {
+  dialog.showModal();
+});
+
+closeBtn.addEventListener("click", () => {
+  dialog.close();
+})
+
+submitBtn.addEventListener("click", () => {
+  addBookToLibrary();
+  submitBtn.preventDefault();
+})
