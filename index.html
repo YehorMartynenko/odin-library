@@ -11,14 +11,12 @@
     <h1>Library</h1>
     <h2>Books:</h2>
     <button class="add-book">Add book</button>
-    <dialog>
-       
-    </dialog>
     <div class="container">
     </div>
 
-    <form class="book-form" action="" method="post">
-         <button class="close-btn">
+    <dialog>
+       <form class="book-form" action="" method="post">
+         <button class="close-btn" type="button">
             <img src="images/close-btn.svg" alt="">
          </button>
         <div>
@@ -26,14 +24,15 @@
             <input type="text" id="title" name="title" required>
         </div>
         <div>
-            <label for="title">Author:</label>
-            <input type="text" id="title" name="title" required>
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="author" required>
         </div>
         <div>
-            <label for="title">Pages:</label>
-            <input type="text" id="title" name="title" required>
+            <label for="pages">Pages:</label>
+            <input type="text" id="pages" name="pages" required>
         </div>
         <div class="submit-btn"><button type="submit">Submit</button></div>
     </form>
+    </dialog>
 </body>
 </html>
