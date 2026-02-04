@@ -31,14 +31,25 @@ function displayBooks(){
         author.textContent = `Author: ${el.author}`;
         pages.textContent = `Pages: ${el.pages}`;
 
+        let deleteBtn = document.createElement("button");
+        let deleteIcon = document.createElement("img");
+
+        deleteBtn.setAttribute("class", "delete-btn");
+        deleteIcon.setAttribute("src", "images/close-btn.svg");
+        deleteBtn.appendChild(deleteIcon);
+
+        book.appendChild(deleteBtn);
         book.appendChild(title);
         book.appendChild(author);
         book.appendChild(pages);
+        book.setAttribute("data-id", el.id);
         container.appendChild(book);
         displayedBooks.push(el);
       }
     });
 }
+
+// addBookToLibrary("title", "author", 123);
 
 displayBooks();
 
@@ -65,7 +76,37 @@ submitBtn.addEventListener("click", (e) => {
   addBookToLibrary(titleInput.value, authorInput.value, pagesInput.value);
   e.preventDefault();
   displayBooks();
+  addEventListenerToAllButtons();
   form.reset();
   dialog.close();
 });
+
+const deleteBtn = document.querySelector(".delete-btn");
+
+// deleteBtn.addEventListener("click", () => {
+//   let bookId = deleteBtn.parentElement.getAttribute("data-id");
+//   console.log(bookId);
+//   console.log("pressed")
+// })
+
+function addEventListenerToAllButtons(){
+  let buttons = document.querySelectorAll(".delete-btn");
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      let bookId = button.parentElement.getAttribute("data-id");
+      myLibrary.forEach((book) => {
+        if(book.id === bookId){
+          let libraryIndex = myLibrary.indexOf(book);
+          myLibrary.splice(libraryIndex, 1);
+          let displayedIndex = displayedBooks.indexOf(book);
+          displayedBooks.splice(displayedIndex, 1);
+          console.log("Delete succes");
+          displayBooks();
+        } else {
+          console.log("Error");
+        }
+      })
+    })
+  })
+}
 
