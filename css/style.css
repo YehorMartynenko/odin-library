@@ -27,7 +27,8 @@ h1, h2 {
     box-shadow: 10px 10px 20px -16px rgba(66, 68, 90, 1);
     padding: 1rem 2rem;
     text-align: center;
-    color:var(--grey)
+    color:var(--grey);
+    position: relative;
 }
 
 .book > p:nth-child(-n+2){
@@ -71,7 +72,7 @@ img {
     width: 30px;
 }
 
-.close-btn {
+.close-btn, .delete-btn {
     align-self: flex-end;
     display: flex;
     justify-items: center;
@@ -83,8 +84,14 @@ img {
     top: 1rem;
 }
 
-.close-btn:hover img{
+.close-btn:hover img, .delete-btn:hover img{
     transform: scale(1.1);
+    cursor: pointer;
+}
+
+.delete-btn img {
+    height: 20px;
+    width: 20px;
 }
 
 .book-form > div  {
@@ -127,4 +134,14 @@ dialog {
     border-radius: 10px;
     border: none;
     margin: auto auto;
+}
+
+.read {
+    color: green;
+    cursor: pointer;
+}
+
+.unread {
+    color: red;
+    cursor: pointer;
 }

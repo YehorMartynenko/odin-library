@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-    <script async src="scripts/main.js"></script>
+    <script defer src="scripts/main.js"></script>
     <title>Library</title>
 </head>
 <body>
@@ -29,7 +29,11 @@
         </div>
         <div>
             <label for="pages">Pages:</label>
-            <input type="text" id="pages" name="pages" required>
+            <input type="number" id="pages" name="pages" required>
+        </div>
+         <div>
+            <label for="status">Read:</label>
+            <input type="checkbox" id="status" name="status">
         </div>
         <div class="submit-btn"><button type="submit">Submit</button></div>
     </form>
