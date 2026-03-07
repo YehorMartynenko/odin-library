@@ -1,32 +1,44 @@
-const myLibrary = [];
-const displayedBooksIds = [];
-function Book(id, title, author, pages, status) {
-  this.id = id,
-  this.title = title,
-  this.author = author,
-  this.pages = pages,
-  this.status = status
-}
+class Book {
+  constructor(id, title, author, pages, status){
+    this.id = id;
+    this.title = title;
+    this.author = author
+    this.pages = pages;
+    this.status = status;
+  }
 
-
-Book.prototype.changeStatus = function() {
-  if(this.status){
-    this.status = false;
-  } else {
-    this.status = true;
+  changeStatus() {
+    if(this.status){
+      this.status = false;
+    } else {
+      this.status = true;
+    }
   }
 }
-function addBookToLibrary(title, author, pages, status) {
-  let newBook = new Book(crypto.randomUUID(), title, author, pages, status);
-  myLibrary.push(newBook);
-}
-console.table(myLibrary);
 
-const container = document.querySelector(".container");
+const Library = (function() {
+  const myLibrary = [];
+  const displayedBooksIds = [];
+
+  const addBookToLibrary = (book) => {
+    myLibrary.push(book);
+  }
+
+  const addToDisplayedBooksIds = (id) => {
+    displayedBooksIds.push(id);
+  }
+  const getLibrary = () => myLibrary;
+  const getDisplayedBooksIds = () => displayedBooksIds;
+
+  return { getLibrary, getDisplayedBooksIds, addBookToLibrary, addToDisplayedBooksIds }
+})();
+
+
+const container = document.querySelector(".container"); 
 
 function displayBooks(){
-    myLibrary.forEach((el) => {
-      if(!displayedBooksIds.includes(el.id)){
+    Library.getLibrary().forEach((el) => {
+      if(!Library.getDisplayedBooksIds().includes(el.id)){
         let book = document.createElement("div");
         book.setAttribute("class","book");
         let title = document.createElement("p");
@@ -56,12 +68,12 @@ function displayBooks(){
         deleteBtn.appendChild(deleteIcon);
         deleteBtn.addEventListener("click", () => {
         let bookId = deleteBtn.parentElement.getAttribute("data-id");
-        let bookIndex = myLibrary.findIndex((book) => book.id === bookId);
+        let bookIndex = Library.getLibrary().findIndex((book) => book.id === bookId);
         if(bookIndex != -1){
           myLibrary.splice(bookIndex, 1);
         }
-        if(displayedBooksIds.indexOf(bookId) != -1){
-          displayedBooksIds.splice(displayedBooksIds.indexOf(bookId), 1);
+        if(Library.getDisplayedBooksIds().indexOf(bookId) != -1){
+          Library.getDisplayedBooksIds().splice(Library.getDisplayedBooksIds().indexOf(bookId), 1);
         }
         container.removeChild(container.querySelector(`.book[data-id='${bookId}']`));
       })
@@ -85,7 +97,7 @@ function displayBooks(){
         book.appendChild(status);
         book.setAttribute("data-id", el.id);
         container.appendChild(book);
-        displayedBooksIds.push(el.id);
+        Library.addToDisplayedBooksIds(el.id);
       }
     });
 }
@@ -112,7 +124,8 @@ const pagesInput = document.querySelector("#pages");
 const statusCheckbox = document.querySelector("#status");
 const form = document.querySelector("form");
 submitBtn.addEventListener("click", (e) => {
-  addBookToLibrary(titleInput.value, authorInput.value, pagesInput.value, statusCheckbox.checked);
+  const newBook = new Book(crypto.randomUUID(), titleInput.value, authorInput.value, pagesInput.value, statusCheckbox.checked);
+  Library.addBookToLibrary(newBook);
   e.preventDefault();
   displayBooks();
   form.reset();
