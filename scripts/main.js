@@ -18,119 +18,125 @@ class Book {
 
 const Library = (function() {
   const myLibrary = [];
-  const displayedBooksIds = [];
 
   const addBookToLibrary = (book) => {
     myLibrary.push(book);
   }
-
-  const addToDisplayedBooksIds = (id) => {
-    displayedBooksIds.push(id);
-  }
   const getLibrary = () => myLibrary;
-  const getDisplayedBooksIds = () => displayedBooksIds;
 
-  return { getLibrary, getDisplayedBooksIds, addBookToLibrary, addToDisplayedBooksIds }
+  const deleteBookFromLibrary = (bookId) => {
+    myLibrary.splice(bookId, 1);
+  }
+
+  const toggleBookStatus = (bookId) => {
+    const bookIndex = myLibrary.findIndex((book) => book.id === bookId);
+    myLibrary[bookIndex]["status"] === true ? false : true;
+  }
+
+  return { getLibrary, addBookToLibrary, deleteBookFromLibrary, toggleBookStatus };
+})();
+
+const DisplayController = (function() {
+  const container = document.querySelector(".container"); 
+
+  const addBookBtn = document.querySelector(".add-book");
+  const dialog = document.querySelector("dialog");
+  const closeBtn = document.querySelector(".close-btn");
+  const submitBtn = document.querySelector("button[type='submit']");
+  const form = document.querySelector("form");
+
+  const displayBooks = () => {
+    container.textContent = "";
+    Library.getLibrary().forEach((el) => {
+      let book = document.createElement("div");
+      book.setAttribute("class","book");
+      let title = document.createElement("p");
+      title.setAttribute("class","title");
+      let author = document.createElement("p");
+      author.setAttribute("class","author");
+      
+      let pages = document.createElement("p");
+      pages.setAttribute("class","pages");
+      let status = document.createElement("p");
+      status.setAttribute("id", "status");
+
+      const statusValue = el.status ? "read" : "unread"
+      status.setAttribute("class", statusValue);
+      status.textContent = `Status: ${statusValue}`;
+      
+      title.textContent = `Title: ${el.title}`;
+      author.textContent = `Author: ${el.author}`;
+      pages.textContent = `Pages: ${el.pages}`;
+
+      let deleteBtn = document.createElement("button");
+      let deleteIcon = document.createElement("img");
+
+      deleteBtn.setAttribute("class", "delete-btn");
+      deleteIcon.setAttribute("src", "images/close-btn.svg");
+      deleteBtn.appendChild(deleteIcon);
+
+      book.appendChild(deleteBtn);
+      book.appendChild(title);
+      book.appendChild(author);
+      book.appendChild(pages);
+      book.appendChild(status);
+      book.dataset.id = el.id;
+
+      container.appendChild(book);
+    });
+  }
+
+  function clickHandlerContainer(e){
+    const deleteBtn = e.target.closest(".delete-btn");
+    if(deleteBtn){
+      const bookCard = deleteBtn.closest(".book");
+      const bookId = bookCard.dataset.id;
+      Library.deleteBookFromLibrary(bookId);
+      displayBooks();
+    }
+
+    const statusBtn = e.target.closest("#status");
+    if(statusBtn){
+      const bookCard = statusBtn.closest(".book");
+      const bookId = bookCard.dataset.id;
+      Library.toggleBookStatus(bookId);
+      displayBooks();
+    }
+  }
+
+  function clickHandlerAddBtn(){
+    dialog.showModal();
+  }
+
+  function clickHandlerCloseBtn(){
+    form.reset();
+    dialog.close();
+  }
+
+  const titleInput = document.querySelector("#title");
+  const authorInput = document.querySelector("#author");
+  const pagesInput = document.querySelector("#pages");
+  const statusCheckbox = document.querySelector("#status");
+
+  function clickHandlerSubmitBtn(e) {
+    const newBook = new Book(crypto.randomUUID(), titleInput.value, authorInput.value, pagesInput.value, statusCheckbox.checked);
+    Library.addBookToLibrary(newBook);
+    e.preventDefault();
+    DisplayController.displayBooks();
+    form.reset();
+    dialog.close();
+  }
+
+  addBookBtn.addEventListener("click", clickHandlerAddBtn);
+  container.addEventListener("click", clickHandlerContainer);
+  closeBtn.addEventListener("click", clickHandlerCloseBtn);
+  submitBtn.addEventListener("click", clickHandlerSubmitBtn);
+  
+  return { displayBooks };
 })();
 
 
-const container = document.querySelector(".container"); 
 
-function displayBooks(){
-    Library.getLibrary().forEach((el) => {
-      if(!Library.getDisplayedBooksIds().includes(el.id)){
-        let book = document.createElement("div");
-        book.setAttribute("class","book");
-        let title = document.createElement("p");
-        title.setAttribute("class","title");
-        let author = document.createElement("p");
-        author.setAttribute("class","author");
-        let pages = document.createElement("p");
-        pages.setAttribute("class","pages");
-        let status = document.createElement("p");
-        if(el.status){
-          status.setAttribute("class", "read");
-          status.textContent = `Status: read`;
-        } else {
-          status.setAttribute("class", "unread");
-          status.textContent = `Status: unread`;
-        }
-        
-        title.textContent = `Title: ${el.title}`;
-        author.textContent = `Author: ${el.author}`;
-        pages.textContent = `Pages: ${el.pages}`;
-
-        let deleteBtn = document.createElement("button");
-        let deleteIcon = document.createElement("img");
-
-        deleteBtn.setAttribute("class", "delete-btn");
-        deleteIcon.setAttribute("src", "images/close-btn.svg");
-        deleteBtn.appendChild(deleteIcon);
-        deleteBtn.addEventListener("click", () => {
-        let bookId = deleteBtn.parentElement.getAttribute("data-id");
-        let bookIndex = Library.getLibrary().findIndex((book) => book.id === bookId);
-        if(bookIndex != -1){
-          myLibrary.splice(bookIndex, 1);
-        }
-        if(Library.getDisplayedBooksIds().indexOf(bookId) != -1){
-          Library.getDisplayedBooksIds().splice(Library.getDisplayedBooksIds().indexOf(bookId), 1);
-        }
-        container.removeChild(container.querySelector(`.book[data-id='${bookId}']`));
-      })
-
-        status.addEventListener("click", () => {
-          if(status.getAttribute("class") === "read"){
-            status.setAttribute("class", "unread");
-            status.textContent = `Status: unread`;
-            el.changeStatus();
-          } else {
-            status.setAttribute("class", "read");
-            status.textContent = `Status: read`;
-            el.changeStatus();
-          }
-        })
-
-        book.appendChild(deleteBtn);
-        book.appendChild(title);
-        book.appendChild(author);
-        book.appendChild(pages);
-        book.appendChild(status);
-        book.setAttribute("data-id", el.id);
-        container.appendChild(book);
-        Library.addToDisplayedBooksIds(el.id);
-      }
-    });
-}
-
-displayBooks();
-
-const addBookBtn = document.querySelector(".add-book");
-const dialog = document.querySelector("dialog");
-const closeBtn = document.querySelector(".close-btn");
-const submitBtn = document.querySelector("button[type='submit']");
-
-addBookBtn.addEventListener("click", () => {
-  dialog.showModal();
-});
-
-closeBtn.addEventListener("click", () => {
-  form.reset();
-  dialog.close();
-})
-
-const titleInput = document.querySelector("#title");
-const authorInput = document.querySelector("#author");
-const pagesInput = document.querySelector("#pages");
-const statusCheckbox = document.querySelector("#status");
-const form = document.querySelector("form");
-submitBtn.addEventListener("click", (e) => {
-  const newBook = new Book(crypto.randomUUID(), titleInput.value, authorInput.value, pagesInput.value, statusCheckbox.checked);
-  Library.addBookToLibrary(newBook);
-  e.preventDefault();
-  displayBooks();
-  form.reset();
-  dialog.close();
-});
 
 
 
