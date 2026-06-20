@@ -140,10 +140,25 @@ const DisplayController = (function () {
     dialog.close();
   }
 
+  const titleInput = document.getElementById("title");
+  const authorInput = document.getElementById("author");
+  const pagesInput = document.getElementById("pages");
+
+  function setCustomError(e) {
+    if (e.target.validity.valueMissing) {
+      e.target.setCustomValidity(`${e.target.name} field must be filled!`);
+    } else {
+      e.target.setCustomValidity("");
+    }
+  }
+
   addBookBtn.addEventListener("click", clickHandlerAddBtn);
   container.addEventListener("click", clickHandlerContainer);
   closeBtn.addEventListener("click", clickHandlerCloseBtn);
   form.addEventListener("submit", clickHandlerSubmitBtn);
+  titleInput.addEventListener("invalid", setCustomError);
+  authorInput.addEventListener("invalid", setCustomError);
+  pagesInput.addEventListener("invalid", setCustomError);
 
   return { displayBooks };
 })();
